@@ -1,7 +1,6 @@
-# Getting Started with Create React App
+# MP3 to Spotify
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+This is the client side for this application 
 ## Available Scripts
 
 In the project directory, you can run:
