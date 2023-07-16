@@ -57,7 +57,7 @@ const UploadFiles = () => {
       <label for="description">
         Playlist description:
       </label>
-      <textarea value={formData.description} onChange={handleChange} id="description" name="description" id="" cols="20" rows="3"></textarea>
+      <textarea value={formData.description} onChange={handleChange} id="description" name="description" cols="20" rows="3"></textarea>
       <label>
         Private playlist:
         <input value={formData.isPrivate} onChange={handleChange} type="checkbox" />
