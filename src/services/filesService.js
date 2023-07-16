@@ -1,33 +1,10 @@
-// import { apiGet, apiPost } from '../utils/apiUtils';
 import qs from 'qs'
 import axios from 'axios';
 
-// const fetchUsers = async () => {
-//   try {
-//     const users = await apiGet('/users');
-//     console.log(users); // Process the fetched users data
-//   } catch (error) {
-//     console.error(error); // Handle any errors
-//   }
-// };
-
-// const createUser = async (userData) => {
-//   try {
-//     const response = await apiPost('/users', userData);
-//     console.log(response); // Handle the response after creating a user
-//   } catch (error) {
-//     console.error(error); // Handle any errors
-//   }
-// };
-
-// Usage examples
-// fetchUsers();
-// createUser({ name: 'John Doe', email: 'johndoe@example.com' });
-
-const clientId = '993fff92e68041ebaf1b4a269be443a1'
-const clientSecret = '9926d6e4e04e4295a3351268b91fdf7a'
-let accessToken
-var redirect_uri = 'http://localhost:3000/uploadFiles'; // Your redirect uri
+const clientId = process.env.REACT_APP_CLIENT_ID
+const clientSecret = process.env.REACT_APP_CLIENT_SECRET
+const redirect_uri = 'http://localhost:3000/uploadFiles';
+let accessToken = undefined
 
 export const spotifyAuthorize = () => {
     var scope = 'user-read-private user-read-email playlist-modify-private playlist-modify-public';
@@ -35,15 +12,8 @@ export const spotifyAuthorize = () => {
 }
 
 export const getAccessToken = async (code) => {
-    // try {
-    //     const response = await apiPost('/users', userData);
-    //     console.log(response); // Handle the response after creating a user
-    // } catch (error) {
-    //     console.error(error); // Handle any errors
-    // }
     try {
         const auth_token = btoa(`${clientId}:${clientSecret}`)
-        // const auth_token = Buffer.from(`${clientId}:${clientSecret}`, 'utf-8').toString('base64');
         const token_url = 'https://accounts.spotify.com/api/token';
         const data = qs.stringify(
             {
@@ -85,7 +55,6 @@ export const getSongsIds = async (songsNames, userLocale) => {
     })
     return Promise.allSettled(promises).then((results) => results.forEach((result) => {
         if (result.status === 'rejected') { // Failed
-            // console.log(result.reason.response.headers['retry-after']);
             const url = result.reason.config.url
             const name = decodeURIComponent(url.substring(url.indexOf('query=') + 'query='.length, url.indexOf('&')))
             failedTracksNames.push(name)
@@ -139,30 +108,3 @@ export const createPlaylistAndAddSongs = async (userId, songsIds, { name, descri
         console.log(error);
     }
 }
-// export const addSongsToPlaylist = (playlist, songsNames) => {
-//     try {
-//         const tracksIds = []
-//         const tracksNamesToSearch = []
-//         const promises = []
-//         fs.readdirSync(musicDirPath).forEach(file => {
-//             tracksNamesToSearch.push(file)
-//         })
-//         for (let i = 0; i < tracksNamesToSearch.length; i++) {
-//             const trackName = tracksNamesToSearch[i];
-//             const responsePromise = axios.get(`https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track&limit=1`,
-//                 { headers: { "Authorization": `Bearer ${accessToken}` } })
-//             promises.push(responsePromise)
-//             // if (response.data.tracks.items.length) {
-//             //     tracksIds.push(response.data.tracks.items[0].id)
-//             // }
-//         }
-//         Promise.allSettled(promises).then((results) => results.forEach((result) => {
-//             if (result.status === 'rejected') {
-//                 console.log(result);
-//             }
-//         }
-//         ));
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
