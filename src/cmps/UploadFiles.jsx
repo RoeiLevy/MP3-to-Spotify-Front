@@ -39,8 +39,7 @@ const UploadFiles = () => {
     await getAccessToken(code)
     const [userId, userLocale] = await getUserIdAndLocale()
     const [songsIds, notFound] = await getSongsIds(formData.files, userLocale)
-    const playlistId = '0x9W4h3k8co7aAXux4WBX3'
-    // const playlistId = await createPlaylistAndAddSongs(userId, songsIds, formData)
+    const playlistId = await createPlaylistAndAddSongs(userId, songsIds, formData)
     navigate('/end',{state:{notFound,formData,playlistId}});
   };
 
