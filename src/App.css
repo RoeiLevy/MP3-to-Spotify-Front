@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  height: 100vh;
+  background-image: url('./assets/spotify-icon.svg');
+  background-size: 100px;
 }
 
 .App-logo {
@@ -35,4 +40,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+a{
+  color: #1ed760;
+  text-decoration: none;
 }
