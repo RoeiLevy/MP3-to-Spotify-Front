@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const clientId = process.env.REACT_APP_CLIENT_ID
 const clientSecret = process.env.REACT_APP_CLIENT_SECRET
-const redirect_uri = 'http://localhost:3000/uploadFiles';
+const redirect_uri = process.env.REACT_APP_REDIRECT_URI
 let accessToken = undefined
 
 export const spotifyAuthorize = () => {
