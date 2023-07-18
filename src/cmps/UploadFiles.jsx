@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getAccessToken, getUserIdAndLocale, getSongsIds, createPlaylistAndAddSongs } from '../services/filesService';
+import { getAccessToken, getUserIdAndLocale, getSongsIds, createPlaylistAndAddSongs, createUserSession } from '../services/filesService';
 import '../styles/UploadFiles.scss'
 import { default as uploadIcon } from '../assets/upload.svg';
 
@@ -40,21 +40,23 @@ const UploadFiles = () => {
     const [userId, userLocale] = await getUserIdAndLocale()
     const [songsIds, notFound] = await getSongsIds(formData.files, userLocale)
     const playlistId = await createPlaylistAndAddSongs(userId, songsIds, formData)
+    await createUserSession({ userId, userLocale, playlistId, uploadCount: formData.files.length, failedCount: notFound.length, succeededCount: songsIds.length })
     navigate('/end',{state:{notFound,formData,playlistId}});
   };
 
   useEffect(() => {
     const code = new URLSearchParams(location.search).get('code');
     setCode(code)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <form onSubmit={handleSubmit}>
-      <label for="name">
+      <label htmlFor="name">
         Playlist name:
       </label>
       <input required value={formData.name} onChange={handleChange} id="name" name='name' type="text" />
-      <label for="description">
+      <label htmlFor="description">
         Playlist description:
       </label>
       <textarea value={formData.description} onChange={handleChange} id="description" name="description" cols="20" rows="3"></textarea>

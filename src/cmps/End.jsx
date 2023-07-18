@@ -5,10 +5,6 @@ import '../styles/End.scss'
 const End = () => {
     const location = useLocation();
 
-    useEffect(() => {
-        console.log(location.state.notFound);
-    }, []);
-
     return (
         <div className="end">
             <p>
@@ -17,7 +13,7 @@ const End = () => {
                 The following songs were not been added to your playlist because<br/> spotify didn't find the a song matching it's name or because of your location.
             </p>
             <ul>
-                {location.state.notFound.map(name => (<li>{name}</li>))}
+                {location.state.notFound.map(name => (<li key={name}>{name}</li>))}
             </ul>
         </div>
     )

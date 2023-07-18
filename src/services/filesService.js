@@ -108,3 +108,19 @@ export const createPlaylistAndAddSongs = async (userId, songsIds, { name, descri
         console.log(error);
     }
 }
+
+export const createUserSession = async (data) => {
+    try {
+        console.log(process.env.REACT_APP_SPOTIFY_BE_URL);
+        await axios.post(process.env.REACT_APP_SPOTIFY_BE_URL+'/user_session/create', {
+            "spotify_user_id": data.userId,
+            "spotify_user_locale": data.userLocale,
+            "playlist_id": data.playlistId,
+            "uploaded_files_count": data.uploadCount,
+            "failed_files_count": data.failedCount,
+            "succeeded_files_count": data.succeededCount
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
