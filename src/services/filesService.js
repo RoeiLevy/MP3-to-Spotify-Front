@@ -18,7 +18,7 @@ export const getAccessToken = async (code) => {
         const data = qs.stringify(
             {
                 code,
-                redirect_uri,
+                redirect_uri:redirect_uri,
                 grant_type: 'authorization_code'
             });
 
@@ -35,14 +35,14 @@ export const getAccessToken = async (code) => {
 }
 export const getUserIdAndLocale = async () => {
     try {
-        const user = await axios.get('https://api.spotify.com/v1/me',
+        const {data} = await axios.get('https://api.spotify.com/v1/me',
             {
                 headers: {
                     "Authorization": `Bearer ${accessToken}`
                 }
             }
         )
-        return [user.data.id, user.data.country]
+        return [data.id, data.country,data.images[1]]
     } catch (error) {
         console.log(error);
     }
@@ -112,7 +112,7 @@ export const createPlaylistAndAddSongs = async (userId, songsIds, { name, descri
 export const createUserSession = async (data) => {
     try {
         console.log(process.env.REACT_APP_SPOTIFY_BE_URL);
-        await axios.post(process.env.REACT_APP_SPOTIFY_BE_URL+'/user_session/create', {
+        await axios.post(process.env.REACT_APP_SPOTIFY_BE_URL+'/upload_files/user_session/create', {
             "spotify_user_id": data.userId,
             "spotify_user_locale": data.userLocale,
             "playlist_id": data.playlistId,

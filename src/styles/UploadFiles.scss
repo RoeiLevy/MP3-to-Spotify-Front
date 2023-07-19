@@ -1,40 +1,50 @@
-form{
+form {
     width: 60vw;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 60px;
     gap: 20px;
-    
+
     > * {
-        display:  flex;
+        display: flex;
         justify-content: center;
         align-items: center;
         color: white;
+        gap: 15px;
     }
 
-    input[type="file"]  , button{
+    label:has(input[type="checkbox"]) {
+        border: 1px solid white;
+        border-radius: 10px;
+    }
+
+    input[type="file"],
+    button {
         margin: auto;
     }
 
-    input[type="file"]{
+    input[type="file"] {
         visibility: hidden;
         position: absolute;
     }
-    
-    input:not(input[type="file"]),textarea{
+
+    input:not(input[type="file"]),
+    textarea {
         background-color: #242424;
-        border:1px solid #ffffff;
+        border: 1px solid #ffffff;
         border-radius: 10px;
     }
-    .file-upload{
+    .file-upload {
         cursor: pointer;
-        img{
+        img {
             width: 30px;
         }
+        border: 1px solid white;
+        border-radius: 10px;
     }
-    
-    button{
+
+    button {
         background-color: #1ed760;
         border: none;
         padding: 20px 30px;
@@ -45,5 +55,5 @@ form{
         font-weight: 1000;
         font-size: 16px;
         width: 30%;
-      }
+    }
 }

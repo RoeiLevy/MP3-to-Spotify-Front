@@ -1,0 +1,13 @@
+header {
+    // display: flex;
+    position: relative;
+    img {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+}

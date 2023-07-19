@@ -3,12 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getAccessToken, getUserIdAndLocale, getSongsIds, createPlaylistAndAddSongs, createUserSession } from '../services/filesService';
 import '../styles/UploadFiles.scss'
 import { default as uploadIcon } from '../assets/upload.svg';
+import { setUser } from '../store/actions/userActions'
+// import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 
-const UploadFiles = () => {
+const _UploadFiles = (props) => {
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const inputRef = useRef(null);
-  const [code, setCode] = useState('');
+  // const [code, setCode] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -36,17 +40,21 @@ const UploadFiles = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await getAccessToken(code)
-    const [userId, userLocale] = await getUserIdAndLocale()
-    const [songsIds, notFound] = await getSongsIds(formData.files, userLocale)
-    const playlistId = await createPlaylistAndAddSongs(userId, songsIds, formData)
-    await createUserSession({ userId, userLocale, playlistId, uploadCount: formData.files.length, failedCount: notFound.length, succeededCount: songsIds.length })
-    navigate('/end',{state:{notFound,formData,playlistId}});
+    const [songsIds, notFound] = await getSongsIds(formData.files, props.user.locale)
+    const playlistId = await createPlaylistAndAddSongs(props.user.id, songsIds, formData)
+    await createUserSession({ userId:props.user.id, userLocale:props.user.locale, playlistId, uploadCount: formData.files.length, failedCount: notFound.length, succeededCount: songsIds.length })
+    navigate('/end', { state: { notFound, formData, playlistId } });
   };
 
-  useEffect(() => {
+  const created = async () => {
     const code = new URLSearchParams(location.search).get('code');
-    setCode(code)
+    await getAccessToken(code)
+    const [userId, userLocale, userImg] = await getUserIdAndLocale()
+    props.setUser({ id: userId, locale: userLocale, img: userImg })
+  }
+
+  useEffect(() => {
+    created()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -61,11 +69,11 @@ const UploadFiles = () => {
       </label>
       <textarea value={formData.description} onChange={handleChange} id="description" name="description" cols="20" rows="3"></textarea>
       <label>
-        Private playlist:
+        Private playlist
         <input value={formData.isPrivate} onChange={handleChange} type="checkbox" />
       </label>
       <div className="file-upload" onClick={handleUploadClick}>
-        Choose files:
+        Choose files
         <img src={uploadIcon} alt="" />
       </div>
       <input type="file" name="files" ref={inputRef} multiple onChange={handleChange} />
@@ -74,4 +82,12 @@ const UploadFiles = () => {
   );
 };
 
-export default UploadFiles;
+// export default UploadFiles;
+const mapStateToProps = state => ({
+  user: state.userReducer.user
+})
+
+const mapDispatchToProps = {
+  setUser
+}
+export const UploadFiles = connect(mapStateToProps, mapDispatchToProps)(_UploadFiles)
